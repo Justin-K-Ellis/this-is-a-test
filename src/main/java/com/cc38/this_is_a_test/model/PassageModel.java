@@ -18,7 +18,6 @@ public class PassageModel {
 
     public PassageModel(@Value("${spring.datasource.url}") String url) {
         this.url = url;
-        System.out.println("DB URL!!!!" + url);
     }
 
     public Connection getConnection() throws SQLDataException {

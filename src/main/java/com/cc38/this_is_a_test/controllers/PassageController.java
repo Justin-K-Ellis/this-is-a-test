@@ -25,7 +25,6 @@ public class PassageController {
     public ArrayList<HashMap<String, String>> getAllPassages() {
         PassageModel pm = applicationContext.getBean(PassageModel.class);
 
-        System.out.println("passage model: " + pm);
         try {
             ArrayList<HashMap<String, String>> results = pm.getAll();
             return results;
