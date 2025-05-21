@@ -1,5 +1,11 @@
 package com.cc38.this_is_a_test.controllers;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,12 +14,26 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cc38.this_is_a_test.model.PassageModel;
+
 @RestController
 public class PassageController {
+    @Autowired
+    private ApplicationContext applicationContext;
  
     @GetMapping("/passage")
-    public String getAllPassages() {
-        return "Here are all the reading passages.";
+    public ArrayList<HashMap<String, String>> getAllPassages() {
+        PassageModel pm = applicationContext.getBean(PassageModel.class);
+
+        System.out.println("passage model: " + pm);
+        try {
+            ArrayList<HashMap<String, String>> results = pm.getAll();
+            return results;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        ArrayList<HashMap<String, String>> nullResult = new ArrayList<HashMap<String, String>>();
+        return nullResult;
     }
 
     @GetMapping("/passage/{id}")
