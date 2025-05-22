@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cc38.this_is_a_test.Passage;
 import com.cc38.this_is_a_test.model.PassageModel;
 
 @RestController
@@ -52,8 +53,10 @@ public class PassageController {
     }
     
     @PostMapping("/passage")
-    public String postPassage(@RequestBody String entity) {
-        return "Just created: " + entity;
+    public Passage postPassage(@RequestBody Passage passage) {
+        PassageModel pm = applicationContext.getBean(PassageModel.class);
+        Passage newPassage = pm.createPassage(passage);
+        return newPassage;
     }
     
     @PutMapping("/passage/{id}")

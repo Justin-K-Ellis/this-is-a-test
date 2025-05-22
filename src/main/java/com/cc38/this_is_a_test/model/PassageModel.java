@@ -13,6 +13,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.cc38.this_is_a_test.Passage;
+
 @Component
 public class PassageModel {
     private final String url;
@@ -54,7 +56,6 @@ public class PassageModel {
 
     public Map<String, String> getById(String id) {
         String query = String.format("SELECT * FROM passage WHERE id = %s", id) ;
-        System.out.println("=QUERY= " + query);
         Map<String, String> result = new HashMap<>();
         try {
             Connection conn = this.getConnection();
@@ -70,6 +71,21 @@ public class PassageModel {
             System.out.println(e);
         }
         return result;
+    }
+
+    public Passage createPassage(Passage passage) {
+        String query = String.format("INSERT INTO passage (title, content) VALUES ('%s', '%s')", passage.getTitle(), passage.getContent());
+        try {
+            Connection conn = this.getConnection();
+            Statement stmt = conn.createStatement();
+            stmt.executeQuery(query);
+            // System.out.println("result set: " + rs);
+            return passage;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        Passage nullPassage = new Passage( "",  "");
+        return nullPassage;
     }
 
 }
