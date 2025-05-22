@@ -66,7 +66,8 @@ public class PassageController {
     }
 
     @DeleteMapping("/passage/{id}")
-    public String deletePassage(@PathVariable String id) {
-        return "Deleted passage " + id;
+    public void deletePassage(@PathVariable String id) {
+        PassageModel pm = applicationContext.getBean(PassageModel.class);
+        pm.deletePassage(id);
     }
 }

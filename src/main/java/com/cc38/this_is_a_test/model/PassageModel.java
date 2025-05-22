@@ -79,7 +79,6 @@ public class PassageModel {
             Connection conn = this.getConnection();
             Statement stmt = conn.createStatement();
             stmt.executeQuery(query);
-            // System.out.println("result set: " + rs);
             return passage;
         } catch (SQLException e) {
             System.out.println(e);
@@ -90,11 +89,21 @@ public class PassageModel {
 
     public void updatePassage(Passage passage, String id) {
         String query = String.format("UPDATE passage SET title = '%s', content = '%s' WHERE id = %s", passage.getTitle(), passage.getContent(), id);
-        System.out.println(query);
         try {
             Connection conn = this.getConnection();
             Statement stmt = conn.createStatement();
             stmt.executeQuery(query); 
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void deletePassage(String id) {
+        String query = String.format("DELETE FROM passage WHERE id = %s", id);
+        try {
+            Connection conn = this.getConnection();
+            Statement stmt = conn.createStatement();
+            stmt.executeQuery(query);
         } catch (SQLException e) {
             System.out.println(e);
         }
