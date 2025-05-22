@@ -60,8 +60,9 @@ public class PassageController {
     }
     
     @PutMapping("/passage/{id}")
-    public String putPassage(@PathVariable String id, @RequestBody String entity) {
-        return "Updated passage " + id;
+    public void putPassage(@PathVariable String id, @RequestBody Passage passage) {
+        PassageModel pm = applicationContext.getBean(PassageModel.class);
+        pm.updatePassage(passage, id);
     }
 
     @DeleteMapping("/passage/{id}")

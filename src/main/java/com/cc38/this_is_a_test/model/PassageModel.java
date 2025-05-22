@@ -88,4 +88,15 @@ public class PassageModel {
         return nullPassage;
     }
 
+    public void updatePassage(Passage passage, String id) {
+        String query = String.format("UPDATE passage SET title = '%s', content = '%s' WHERE id = %s", passage.getTitle(), passage.getContent(), id);
+        System.out.println(query);
+        try {
+            Connection conn = this.getConnection();
+            Statement stmt = conn.createStatement();
+            stmt.executeQuery(query); 
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
 }
