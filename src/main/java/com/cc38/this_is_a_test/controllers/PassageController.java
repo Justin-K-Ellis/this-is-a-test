@@ -3,6 +3,7 @@ package com.cc38.this_is_a_test.controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -31,14 +32,23 @@ public class PassageController {
         } catch (SQLException e) {
             System.out.println(e);
         }
-        ArrayList<HashMap<String, String>> nullResult = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> nullResult = new ArrayList<>();
         return nullResult;
     }
 
     @GetMapping("/passage/{id}")
-    public String getPassageById(@PathVariable String id) {
+    public Map<String, String> getPassageById(@PathVariable String id) {
         System.out.println(id);
-        return "Here is passage " + id;
+        PassageModel pm = applicationContext.getBean(PassageModel.class);
+        
+        try {
+            Map<String, String> result = pm.getById(id);
+            return result;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        Map<String, String> nullResult = new HashMap<>();
+        return nullResult;
     }
     
     @PostMapping("/passage")
