@@ -7,8 +7,6 @@ import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -33,19 +31,19 @@ public class PassageModel {
         return conn;
     }
 
-    public ArrayList<HashMap<String, String>> getAll() throws SQLDataException {
+    public ArrayList<Passage> getAll() throws SQLDataException {
         String query = "SELECT * FROM passage;";
-        ArrayList<HashMap<String, String>> results = new ArrayList<>();
+        ArrayList<Passage> results = new ArrayList<>();
         try {
             Connection conn = this.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                HashMap<String, String> passage = new HashMap<>();
+                Passage passage = new Passage("", "");
                 String title = rs.getString("title");
                 String content = rs.getString("content");
-                passage.put("title", title);
-                passage.put("content", content);
+                passage.updateTitle(title);
+                passage.updateContent(content);
                 results.add(passage);
             }
         } catch (SQLException e) {
@@ -54,9 +52,9 @@ public class PassageModel {
         return results;
     }
 
-    public Map<String, String> getById(String id) {
+    public Passage getById(String id) {
         String query = String.format("SELECT * FROM passage WHERE id = %s", id) ;
-        Map<String, String> result = new HashMap<>();
+        Passage result = new Passage("", "");
         try {
             Connection conn = this.getConnection();
             Statement stmt = conn.createStatement();
@@ -64,8 +62,8 @@ public class PassageModel {
             while (rs.next()) {
                 String title = rs.getString("title");
                 String content = rs.getString("content");
-                result.put("title", title);
-                result.put("content", content);
+                result.updateTitle(title);
+                result.updateContent(content);
             }
         } catch (SQLException e) {
             System.out.println(e);
