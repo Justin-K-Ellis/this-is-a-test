@@ -2,11 +2,10 @@ package com.cc38.this_is_a_test.controllers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,50 +23,79 @@ public class PassageController {
     private ApplicationContext applicationContext;
  
     @GetMapping("/passage")
-    public ArrayList<HashMap<String, String>> getAllPassages() {
+    public ResponseEntity<ArrayList<Passage>> getAllPassages() {
         PassageModel pm = applicationContext.getBean(PassageModel.class);
 
         try {
-            ArrayList<HashMap<String, String>> results = pm.getAll();
-            return results;
+            ArrayList<Passage> results = pm.getAll();
+            return ResponseEntity.ok().body(results);
         } catch (SQLException e) {
             System.out.println(e);
+            return ResponseEntity.internalServerError().build();
         }
-        ArrayList<HashMap<String, String>> nullResult = new ArrayList<>();
-        return nullResult;
     }
 
     @GetMapping("/passage/{id}")
-    public Map<String, String> getPassageById(@PathVariable String id) {
-        System.out.println(id);
+    public ResponseEntity<Passage> getPassageById(@PathVariable String id) {
         PassageModel pm = applicationContext.getBean(PassageModel.class);
         
         try {
-            Map<String, String> result = pm.getById(id);
-            return result;
+            Passage result = pm.getById(id);
+            System.out.println(result);
+            if (result.getTitle().equals("")) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             System.out.println(e);
+            return ResponseEntity.internalServerError().build();
         }
-        Map<String, String> nullResult = new HashMap<>();
-        return nullResult;
     }
     
     @PostMapping("/passage")
-    public Passage postPassage(@RequestBody Passage passage) {
+    public ResponseEntity<Passage> postPassage(@RequestBody Passage passage) {
         PassageModel pm = applicationContext.getBean(PassageModel.class);
-        Passage newPassage = pm.createPassage(passage);
-        return newPassage;
+
+        try {
+            pm.createPassage(passage);
+            return ResponseEntity.status(201).body(passage);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
     
     @PutMapping("/passage/{id}")
-    public void putPassage(@PathVariable String id, @RequestBody Passage passage) {
+    public ResponseEntity<Passage> putPassage(@PathVariable String id, @RequestBody Passage passage) {
         PassageModel pm = applicationContext.getBean(PassageModel.class);
         pm.updatePassage(passage, id);
+
+        try {
+            Passage targetPassage = pm.getById(id);
+            if (targetPassage.getTitle().equals("")) {
+                return ResponseEntity.status(404).build();
+            }
+            return ResponseEntity.ok().body(passage);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @DeleteMapping("/passage/{id}")
-    public void deletePassage(@PathVariable String id) {
+    public ResponseEntity<String> deletePassage(@PathVariable String id) {
         PassageModel pm = applicationContext.getBean(PassageModel.class);
-        pm.deletePassage(id);
+        
+        try {
+            Passage checkPassage = pm.getById(id);
+            if (checkPassage.getTitle().equals("")) {
+                return ResponseEntity.notFound().build();
+            }
+            pm.deletePassage(id);
+            return ResponseEntity.ok().body(id);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
