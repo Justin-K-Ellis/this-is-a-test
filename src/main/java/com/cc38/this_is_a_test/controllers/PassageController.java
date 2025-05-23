@@ -44,7 +44,6 @@ public class PassageController {
         
         try {
             Passage result = pm.getById(id);
-            System.out.println(result);
             if (result.getTitle().equals("")) {
                 return ResponseEntity.notFound().build();
             }

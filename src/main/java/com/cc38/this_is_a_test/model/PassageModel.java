@@ -39,11 +39,10 @@ public class PassageModel {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                Passage passage = new Passage("", "");
+                String id = rs.getString("id");
                 String title = rs.getString("title");
                 String content = rs.getString("content");
-                passage.updateTitle(title);
-                passage.updateContent(content);
+                Passage passage = new Passage(id, title, content);
                 results.add(passage);
             }
         } catch (SQLException e) {
@@ -54,7 +53,7 @@ public class PassageModel {
 
     public Passage getById(String id) {
         String query = String.format("SELECT * FROM passage WHERE id = %s", id) ;
-        Passage result = new Passage("", "");
+        Passage result = new Passage(id, "", "");
         try {
             Connection conn = this.getConnection();
             Statement stmt = conn.createStatement();
@@ -81,7 +80,7 @@ public class PassageModel {
         } catch (SQLException e) {
             System.out.println(e);
         }
-        Passage nullPassage = new Passage( "",  "");
+        Passage nullPassage = new Passage("", "",  "");
         return nullPassage;
     }
 
