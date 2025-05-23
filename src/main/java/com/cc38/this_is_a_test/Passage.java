@@ -1,12 +1,18 @@
 package com.cc38.this_is_a_test;
 
 public class Passage {
+    private final String id;
     private String title;
     private String content;
 
-    public Passage(String title, String content) {
+    public Passage(String id, String title, String content) {
+        this.id = id;
         this.title = title;
         this.content = content;
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public String getTitle() {
