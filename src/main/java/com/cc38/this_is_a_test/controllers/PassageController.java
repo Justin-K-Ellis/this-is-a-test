@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ public class PassageController {
     @Autowired
     private ApplicationContext applicationContext;
  
+    @CrossOrigin(origins="http://localhost:5173")
     @GetMapping("/passage")
     public ResponseEntity<ArrayList<Passage>> getAllPassages() {
         PassageModel pm = applicationContext.getBean(PassageModel.class);
@@ -35,6 +37,7 @@ public class PassageController {
         }
     }
 
+    @CrossOrigin(origins="http://localhost:5173")
     @GetMapping("/passage/{id}")
     public ResponseEntity<Passage> getPassageById(@PathVariable String id) {
         PassageModel pm = applicationContext.getBean(PassageModel.class);
@@ -52,6 +55,7 @@ public class PassageController {
         }
     }
     
+    @CrossOrigin(origins="http://localhost:5173")
     @PostMapping("/passage")
     public ResponseEntity<Passage> postPassage(@RequestBody Passage passage) {
         PassageModel pm = applicationContext.getBean(PassageModel.class);
@@ -65,6 +69,7 @@ public class PassageController {
         }
     }
     
+    @CrossOrigin(origins="http://localhost:5173")
     @PutMapping("/passage/{id}")
     public ResponseEntity<Passage> putPassage(@PathVariable String id, @RequestBody Passage passage) {
         PassageModel pm = applicationContext.getBean(PassageModel.class);
@@ -82,10 +87,11 @@ public class PassageController {
         }
     }
 
+    @CrossOrigin(origins="http://localhost:5173")
     @DeleteMapping("/passage/{id}")
     public ResponseEntity<String> deletePassage(@PathVariable String id) {
         PassageModel pm = applicationContext.getBean(PassageModel.class);
-        
+
         try {
             Passage checkPassage = pm.getById(id);
             if (checkPassage.getTitle().equals("")) {
